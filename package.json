@@ -1,0 +1,19 @@
+{
+  "name": "bunyan-arangodb",
+  "version": "0.1.0",
+  "description": "Bunyan stream for ArangoDB",
+  "main": "index.js",
+  "keywords": [
+    "bunyan",
+    "stream",
+    "arango",
+    "arangodb",
+    "arangojs"
+  ],
+  "author": "Kurt Kincaid <kurt.kincaid@gmail.com>",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "arangojs": "*",
+    "aqb": "*"
+  }
+}
