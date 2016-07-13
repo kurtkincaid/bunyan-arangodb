@@ -40,7 +40,7 @@ var _systemLogger = {
 var logger = bunyan.createLogger( _systemLogger );
 
 logger.info( {
-    'type' : 'authentication',
+    'type' : 'notice',
     'user': 'kurt'
 }, 'Kurt just added an entry in the systemLog collection.' );
 ```

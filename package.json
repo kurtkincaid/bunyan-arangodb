@@ -12,8 +12,12 @@
   ],
   "author": "Kurt Kincaid <kurt.kincaid@gmail.com>",
   "license": "Apache 2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kurtkincaid/bunyan-arangodb.git"
+  },
   "dependencies": {
-    "arangojs": "*",
-    "aqb": "*"
+    "aqb": "^2.1.0",
+    "arangojs": "^4.3.0"
   }
 }
