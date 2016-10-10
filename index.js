@@ -4,7 +4,6 @@
  * @version 0.1.0
  */
 
-var qb = require( 'aqb' );
 var url = require( 'url' );
 
 /**
