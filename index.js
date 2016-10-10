@@ -5,6 +5,7 @@
  */
 
 var qb = require( 'aqb' );
+var url = require( 'url' );
 
 /**
  * Main module constructor
@@ -23,26 +24,19 @@ var qb = require( 'aqb' );
 function bunyanArangoDB( opts ) {
     opts = opts || {};
     this.server = opts.server || 'http://127.0.0.1';
-    this.port = opts.port || 8529;
+    var u = url.parse( opts.server || 'http://127.0.0.1:8529' );
+    this.server = u.hostname;
+    this.port = u.port || opts.port || 8529;
     this.db = opts.db || '_system';
     this.collection = opts.collection || 'logs';
     this.username = opts.username;
     this.password = opts.password;
-    var x = this.server.match( /^(\w+:\/\/)(.*)/ );
-    this.protocol = x[ 1 ];
-    var y;
-    if ( y = x[ 2 ].match( /^(.*):(\d+)/ ) ) {
-        this.server = y[ 1 ];
-        this.port = y[ 2 ];
-    }
-    else {
-        this.server = x[ 2 ];
-    }
     this.connectString = `${this.protocol}${this.username}:${this.password}@${this.server}:${this.port}`;
     var arangodb;
     try {
         arangodb = require( 'arangojs' )( this.connectString );
         arangodb.useDatabase( this.db );
+        this.aqlQuery = require( 'arangojs' ).aqlQuery;
     }
     catch( e ) {
         return e;
@@ -57,11 +51,11 @@ function bunyanArangoDB( opts ) {
  */
 bunyanArangoDB.prototype.write = function( entry ) {
     var item = JSON.parse( entry );
-    this.arangodb.query(
-        qb.insert( qb( item ) ).into( this.collection )
-    ).then( r => {
+    this.arangodb.query( this.aqlQuery `
+        INSERT ${item} IN ${this.collection}
+    ` ).then( r => {
         // Not doing anything with the results. Return them, maybe?
-        return;
+        return null;
     } ).catch( e => {
         return e;
     } );
