@@ -1,10 +1,11 @@
 /**
  * @fileOverview Bunyan stream for ArangoDB
  * @author Kurt Kincaid
- * @version 0.1.0
+ * @version 0.2.0
  */
 
-var qb = require( 'aqb' );
+var url = require( 'url' );
+var debug = require( 'debug' )( 'bunyan-arangodb' );
 
 /**
  * Main module constructor
@@ -23,31 +24,25 @@ var qb = require( 'aqb' );
 function bunyanArangoDB( opts ) {
     opts = opts || {};
     this.server = opts.server || 'http://127.0.0.1';
-    this.port = opts.port || 8529;
+    var u = url.parse( opts.server || 'http://127.0.0.1:8529' );
+    this.server = u.hostname;
+    this.port = u.port || opts.port || 8529;
     this.db = opts.db || '_system';
-    this.collection = opts.collection || 'logs';
     this.username = opts.username;
     this.password = opts.password;
-    var x = this.server.match( /^(\w+:\/\/)(.*)/ );
-    this.protocol = x[ 1 ];
-    var y;
-    if ( y = x[ 2 ].match( /^(.*):(\d+)/ ) ) {
-        this.server = y[ 1 ];
-        this.port = y[ 2 ];
-    }
-    else {
-        this.server = x[ 2 ];
-    }
-    this.connectString = `${this.protocol}${this.username}:${this.password}@${this.server}:${this.port}`;
+    this.connectString = `${u.protocol}//${this.username}:${this.password}@${this.server}:${this.port}`;
     var arangodb;
     try {
         arangodb = require( 'arangojs' )( this.connectString );
         arangodb.useDatabase( this.db );
+        this.aqlQuery = require( 'arangojs' ).aqlQuery;
+        this.collection = arangodb.collection( opts.collection || 'logs' );
+        this.arangodb = arangodb;
+
     }
     catch( e ) {
         return e;
     }
-    this.arangodb = arangodb;
 }
 
 /**
@@ -56,13 +51,13 @@ function bunyanArangoDB( opts ) {
  * @param {Object} entry Raw Bunyan log data
  */
 bunyanArangoDB.prototype.write = function( entry ) {
-    var item = JSON.parse( entry );
-    this.arangodb.query(
-        qb.insert( qb( item ) ).into( this.collection )
+    this.arangodb.query( this.aqlQuery `INSERT ${JSON.parse( entry )} IN ${this.collection}`
     ).then( r => {
         // Not doing anything with the results. Return them, maybe?
-        return;
+        debug( `Write successful: ${JSON.stringify( r, null, 2 )}` );
+        return null;
     } ).catch( e => {
+        debug( `ERROR: ${e}` );
         return e;
     } );
 };

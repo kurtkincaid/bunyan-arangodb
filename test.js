@@ -1,5 +1,5 @@
 var bunyan = require( 'bunyan' );
-var bunyanArangoDB = require( 'bunyan-arangodb' );
+var bunyanArangoDB = require( './index.js' );
 var _systemLogger = {
     'src': false,
     'name': 'systemLogger',
@@ -7,11 +7,11 @@ var _systemLogger = {
     'streams': [ {
         'level': 'info',
         'stream': new bunyanArangoDB( {
-            'collection': 'logs', // Default
+            'server': 'http://127.0.0.1:8529', // Default
+            'db': '_system', // Default
+            'collection': 'log', // Default
             'username': 'someGuy', // Required
-            'password': 'myPassword', // Required
-            'server': 'http://127.0.0.1:8529',  // Default.
-            'db': '_system'  // Default.
+            'password': 'myPassword' // Required
         } )
     } ]
 }
