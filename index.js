@@ -1,7 +1,7 @@
 /**
  * @fileOverview Bunyan stream for ArangoDB
  * @author Kurt Kincaid
- * @version 0.3.0
+ * @version 0.3.1
  */
 
 var url = require( 'url' );
