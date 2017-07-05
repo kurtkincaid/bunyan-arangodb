@@ -1,13 +1,10 @@
 # ArangoDB stream for Bunyan
 
-This module has been tested with the following:
+[![Known Vulnerabilities](https://snyk.io/test/github/kurtkincaid/bunyan-arangodb/badge.svg)](https://snyk.io/test/github/kurtkincaid/bunyan-arangodb)
 
-* bunyan 1.5.1
-* aqb 2.0.2
-* arrangojs 4.1.0
-* ArangoDB 2.8.4 and 2.8.5
+A simple and configurable ArangoDB for Bunyan.
 
-The module itself is very simple, so presumably it would work with versions other than those shown above.
+Please note: This module will not create the database and/or collection for you. These must already exist in your ArangoDB instance when your code is run.
 
 # Installation
 

@@ -1,7 +1,7 @@
 /**
  * @fileOverview Bunyan stream for ArangoDB
  * @author Kurt Kincaid
- * @version 0.2.0
+ * @version 0.3.0
  */
 
 var url = require( 'url' );
@@ -51,12 +51,12 @@ function bunyanArangoDB( opts ) {
  * @param {Object} entry Raw Bunyan log data
  */
 bunyanArangoDB.prototype.write = function( entry ) {
-    this.arangodb.query( this.aqlQuery `INSERT ${JSON.parse( entry )} IN ${this.collection}`
-    ).then( r => {
+        this.arangodb.query( this.aqlQuery `INSERT ${JSON.parse( entry )} IN ${this.collection}`
+    ).then( ( r ) => {
         // Not doing anything with the results. Return them, maybe?
         debug( `Write successful: ${JSON.stringify( r, null, 2 )}` );
         return null;
-    } ).catch( e => {
+    } ).catch( ( e ) => {
         debug( `ERROR: ${e}` );
         return e;
     } );
