@@ -2,7 +2,7 @@
 
 [![Known Vulnerabilities](https://snyk.io/test/github/kurtkincaid/bunyan-arangodb/badge.svg)](https://snyk.io/test/github/kurtkincaid/bunyan-arangodb)
 
-A simple and configurable ArangoDB for Bunyan. The module itself is relatively simple, so it should work with most version of ArangoDB and the module dependencies.
+A simple and configurable ArangoDB for Bunyan. The module itself is relatively simple, so it should work with most versions of ArangoDB and the module dependencies.
 
 Please note: This module will not create the database and/or collection for you. These must already exist in your ArangoDB instance when your code is run.
 
