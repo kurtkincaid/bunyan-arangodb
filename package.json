@@ -1,6 +1,6 @@
 {
   "name": "bunyan-arangodb",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Bunyan stream for ArangoDB",
   "main": "index.js",
   "keywords": [
@@ -17,6 +17,7 @@
     "url": "https://github.com/kurtkincaid/bunyan-arangodb.git"
   },
   "dependencies": {
-    "arangojs": "^4.3.0"
+    "arangojs": "^4.3.0",
+    "debug": "*"
   }
 }
