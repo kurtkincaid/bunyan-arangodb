@@ -1,6 +1,6 @@
 {
   "name": "bunyan-arangodb",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Bunyan stream for ArangoDB",
   "main": "index.js",
   "keywords": [
