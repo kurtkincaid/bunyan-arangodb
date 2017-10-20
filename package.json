@@ -18,6 +18,12 @@
   },
   "dependencies": {
     "arangojs": "^4.3.0",
-    "debug": "*"
-  }
+    "debug": "*",
+    "snyk": "^1.41.1"
+  },
+  "scripts": {
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }
