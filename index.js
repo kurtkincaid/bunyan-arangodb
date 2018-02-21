@@ -1,19 +1,20 @@
 /**
  * @fileOverview Bunyan stream for ArangoDB
  * @author Kurt Kincaid
- * @version 0.3.2
+ * @version 1.0.0
  */
 
 var url = require( 'url' );
-var debug = require( 'debug' )( 'bunyan-arangodb' );
+//var debug = require( 'debug' )( 'bunyan-arangodb' );
 
 /**
  * Main module constructor
- * 
+ *
  * Options/Defaults:
- * 
+ *
  *  opts = {
  *      'collection': 'logs', // Optional. Default: logs
+ *      'agentOptions': { 'ca': caCertArray }, // Optional. 
  *      'username': '', // Required. No default.
  *      'password': '', // Required. No default.
  *      'server': 'http://localhost:8529', // Optional. Default: http://localhost:8529
@@ -22,6 +23,7 @@ var debug = require( 'debug' )( 'bunyan-arangodb' );
  *  }
  */
 function bunyanArangoDB( opts ) {
+    //debug( `opts: ${JSON.stringify( opts, null, 2 )}` );
     opts = opts || {};
     this.server = opts.server || 'http://127.0.0.1';
     var u = url.parse( opts.server || 'http://127.0.0.1:8529' );
@@ -32,15 +34,21 @@ function bunyanArangoDB( opts ) {
     this.password = opts.password;
     this.connectString = `${u.protocol}//${this.username}:${this.password}@${this.server}:${this.port}`;
     var arangodb;
+    var options = {
+        'url': this.connectString,
+        'databaseName': this.db
+    }
+    if ( opts[ 'agentOptions' ] ) {
+        options[ 'agentOptions' ] = opts[ 'agentOptions' ];
+    }
     try {
-        arangodb = require( 'arangojs' )( this.connectString );
-        arangodb.useDatabase( this.db );
+        //debug( `options: ${JSON.stringify( options, null, 2 )}` );
+        arangodb = require( 'arangojs' )( options );
         this.aqlQuery = require( 'arangojs' ).aqlQuery;
         this.collection = arangodb.collection( opts.collection || 'logs' );
         this.arangodb = arangodb;
-
     }
-    catch( e ) {
+    catch ( e ) {
         return e;
     }
 }
@@ -51,13 +59,12 @@ function bunyanArangoDB( opts ) {
  * @param {Object} entry Raw Bunyan log data
  */
 bunyanArangoDB.prototype.write = function( entry ) {
-        this.arangodb.query( this.aqlQuery `INSERT ${JSON.parse( entry )} IN ${this.collection}`
-    ).then( ( r ) => {
+    this.arangodb.query( this.aqlQuery `INSERT ${JSON.parse( entry )} IN ${this.collection}` ).then( ( r ) => {
         // Not doing anything with the results. Return them, maybe?
-        debug( `Write successful: ${JSON.stringify( r, null, 2 )}` );
+        // debug( `Write successful: ${JSON.stringify( r, null, 2 )}` );
         return null;
     } ).catch( ( e ) => {
-        debug( `ERROR: ${e}` );
+        // debug( `ERROR: ${e}` );
         return e;
     } );
 };
