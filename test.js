@@ -11,6 +11,7 @@ var _systemLogger = {
             'db': '_system', // Default
             'collection': 'log', // Default
             'username': 'someGuy', // Required
+            // 'agentOptions': {}, // Standard agentOptions that are permitted with http.Agent and https.Agent
             'password': 'myPassword' // Required
         } )
     } ]

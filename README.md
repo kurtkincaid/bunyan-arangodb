@@ -26,6 +26,7 @@ var _systemLogger = {
         'level': 'info',
         'stream': new bunyanArangoDB( {
             'collection': 'systemLog',
+            'agentOptions': {}, // Standard agentOptions that are permitted with http.Agent and https.Agent (Optional)
             'username': 'someGuy',
             'password': 'myPassword',
             'server': 'http://127.0.0.1:8529'  // default
@@ -43,4 +44,4 @@ logger.info( {
 ```
 # API
 
-Still working on the documentation....
+Usage is straight forward and relatively simple. Starting with v1.0.0, you can pass *agentOptions*, which will allow for things such as trusting certificates issued from internal CAs.
